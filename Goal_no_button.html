@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator</title>
+</head>
+
+<body>
+
+    <h2>Percentage Calculator</h2>
+
+    <div>
+        <label for="weight">Enter Weight: </label>
+        <input type="number" id="weight" placeholder="Weight" oninput="calculatePercentage()">
+    </div>
+
+    <div>
+        <label for="cube">Enter Cube: </label>
+        <input type="number" id="cube" placeholder="Cube" oninput="calculatePercentage()">
+    </div>
+
+    <!-- Removed the Calculate button -->
+    <button onclick="clearEntries()">Clear</button>
+
+    <div>
+        <h3>Result</h3>
+        <p>Weight Percentage: <span id="weightPercentage">0</span>%</p>
+        <p>Cube Percentage: <span id="cubePercentage">0</span>%</p>
+        <p>Average Percentage: <span id="averagePercentage">0</span>%</p>
+    </div>
+
+    <script>
+        function calculatePercentage() {
+            // Get the weight and cube from the inputs
+            let weight = parseFloat(document.getElementById('weight').value) || 0;
+            let cube = parseFloat(document.getElementById('cube').value) || 0;
+
+            // Calculate the percentages
+            let weightPercentage = (weight / 45000) * 100;
+            let cubePercentage = (cube / 3280) * 100;
+
+            // Calculate the average percentage
+            let averagePercentage = (weightPercentage + cubePercentage) / 2;
+
+            // Display the percentages
+            document.getElementById('weightPercentage').innerText = weightPercentage.toFixed(2);
+            document.getElementById('cubePercentage').innerText = cubePercentage.toFixed(2);
+            document.getElementById('averagePercentage').innerText = averagePercentage.toFixed(2);
+        }
+
+        function clearEntries() {
+            // Clear the input fields
+            document.getElementById('weight').value = '';
+            document.getElementById('cube').value = '';
+
+            // Reset the displayed percentages
+            document.getElementById('weightPercentage').innerText = '0';
+            document.getElementById('cubePercentage').innerText = '0';
+            document.getElementById('averagePercentage').innerText = '0';
+        }
+    </script>
+
+
+	<footer>
+        <p><a href="index.html">Back to the Home Page</a></p>
+    </footer>
+</body>
+</html>
