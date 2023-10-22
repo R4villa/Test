@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight Calculation</title>
+<script>
+var inputId = 1; // Global variable to keep track of the next input ID
+
+function addWeightFields() {
+    var container = document.getElementById('weightInputs');
+
+    // Create new elements
+    var newDiv = document.createElement('div');
+    newDiv.id = 'inputSet' + inputId;
+
+    var bustInput = document.createElement('input');
+    bustInput.type = 'number';
+    bustInput.placeholder = 'Bust Weight';
+    bustInput.id = 'bustWeight' + inputId;
+
+    var actualInput = document.createElement('input');
+    actualInput.type = 'number';
+    actualInput.placeholder = 'Actual Weight';
+    actualInput.id = 'actualWeight' + inputId;
+
+    newDiv.appendChild(bustInput);
+    newDiv.appendChild(actualInput);
+    container.appendChild(newDiv);
+
+    // Increment the ID for the next set of inputs
+    inputId++;
+}
+
+function calculateWeight() {
+    var totalWeightDifference = 0;
+
+    // Loop through all the input fields and calculate the total weight difference
+    for (var i = 0; i < inputId; i++) {
+        var bustWeight = parseFloat(document.getElementById('bustWeight' + i).value) || 0;
+        var actualWeight = parseFloat(document.getElementById('actualWeight' + i).value) || 0;
+
+        totalWeightDifference += (bustWeight - actualWeight); // Calculate the difference
+    }
+
+    // Perform the rest of the calculations
+    var currentTrailerWeight = parseFloat(document.getElementById('currentTrailerWeight').value) || 0;
+    var maxWeight = 45500 + totalWeightDifference; // Adjust the max weight based on the total difference
+    var adjustedTrailerWeight = currentTrailerWeight - totalWeightDifference;
+
+    // Display the results
+    document.getElementById('weightDifference').value = totalWeightDifference.toFixed(2);
+    document.getElementById('maxWeight').value = maxWeight.toFixed(2);
+    document.getElementById('adjustedTrailerWeight').value = adjustedTrailerWeight.toFixed(2);
+}
+
+function clearFields() {
+    // Clear the dynamically added fields by removing the elements
+    var container = document.getElementById('weightInputs');
+    for (var i = 1; i < inputId; i++) { // Keep the initial set, clear the rest
+        var inputSet = document.getElementById('inputSet' + i);
+        container.removeChild(inputSet);
+    }
+    inputId = 1; // Reset the global id tracker
+
+    // Clear all the remaining fields
+    document.getElementById('bustWeight0').value = '';
+    document.getElementById('actualWeight0').value = '';
+    document.getElementById('currentTrailerWeight').value = '';
+    document.getElementById('weightDifference').value = '';
+    document.getElementById('maxWeight').value = '';
+    document.getElementById('adjustedTrailerWeight').value = '';
+}
+
+</script>
+</head>
+<body>
+
+<h3>Weight Calculation</h3>
+
+<div id="weightInputs">
+    <div id="inputSet0">
+        <input type="number" id="bustWeight0" placeholder="Bust Weight">
+        <input type="number" id="actualWeight0" placeholder="Actual Weight">
+    </div>
+</div>
+
+<button onclick="addWeightFields()">Add More</button>
+
+<div>
+    <label>Current Trailer Weight:</label>
+    <input type="number" id="currentTrailerWeight" placeholder="Current Trailer Weight">
+</div>
+
+<div>
+    <button onclick="calculateWeight()">Calculate</button>
+    <button onclick="clearFields()">Clear</button>
+</div>
+
+<div>
+    <label>Weight Difference (Bust - Actual):</label>
+    <input type="text" id="weightDifference" readonly>
+</div>
+
+<div>
+    <label>Max Weight (45500 +/- difference):</label>
+    <input type="text" id="maxWeight" readonly>
+</div>
+
+<div>
+    <label>Adjusted Trailer Weight (Current - Difference):</label>
+    <input type="text" id="adjustedTrailerWeight" readonly>
+</div>
+
+</body>
+</html>
