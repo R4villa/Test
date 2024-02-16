@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weight Calculation</title>
+<title>Weight and Cube Calculation</title>
 <script>
 var inputId = 1; // Global variable to keep track of the next input ID
 
 function addWeightFields() {
     var container = document.getElementById('weightInputs');
-
-    // Create new elements
     var newDiv = document.createElement('div');
     newDiv.id = 'inputSet' + inputId;
 
@@ -24,70 +22,95 @@ function addWeightFields() {
     actualInput.placeholder = 'Actual Weight';
     actualInput.id = 'actualWeight' + inputId;
 
+    var bustCubeInput = document.createElement('input');
+    bustCubeInput.type = 'number';
+    bustCubeInput.placeholder = 'Bust Cube';
+    bustCubeInput.id = 'bustCube' + inputId;
+
+    var actualCubeInput = document.createElement('input');
+    actualCubeInput.type = 'number';
+    actualCubeInput.placeholder = 'Actual Cube';
+    actualCubeInput.id = 'actualCube' + inputId;
+
     newDiv.appendChild(bustInput);
     newDiv.appendChild(actualInput);
+    newDiv.appendChild(bustCubeInput);
+    newDiv.appendChild(actualCubeInput);
     container.appendChild(newDiv);
 
-    // Increment the ID for the next set of inputs
     inputId++;
 }
 
 function calculateWeight() {
     var totalWeightDifference = 0;
+    var adjustedCube = parseFloat(document.getElementById('currentCube').value) || 0; // Start with the current cube value
 
-    // Loop through all the input fields and calculate the total weight difference
     for (var i = 0; i < inputId; i++) {
         var bustWeight = parseFloat(document.getElementById('bustWeight' + i).value) || 0;
         var actualWeight = parseFloat(document.getElementById('actualWeight' + i).value) || 0;
+        var bustCube = parseFloat(document.getElementById('bustCube' + i).value) || 0;
+        var actualCube = parseFloat(document.getElementById('actualCube' + i).value) || 0;
 
-        totalWeightDifference += (bustWeight - actualWeight); // Calculate the difference
+        totalWeightDifference += (bustWeight - actualWeight);
+
+        // Adjust the cube based on the difference between bust and actual cube
+        if (bustCube > actualCube) {
+            adjustedCube -= (bustCube - actualCube); // Subtract if bust cube is greater
+        } else {
+            adjustedCube += (actualCube - bustCube); // Add otherwise
+        }
     }
 
-    // Perform the rest of the calculations
     var currentTrailerWeight = parseFloat(document.getElementById('currentTrailerWeight').value) || 0;
-    var maxWeight = 45500 + totalWeightDifference; // Adjust the max weight based on the total difference
+    var maxWeight = 45500 + totalWeightDifference;
     var adjustedTrailerWeight = currentTrailerWeight - totalWeightDifference;
 
-    // Display the results
+    // Display calculation results
     document.getElementById('weightDifference').value = totalWeightDifference.toFixed(2);
     document.getElementById('maxWeight').value = maxWeight.toFixed(2);
     document.getElementById('adjustedTrailerWeight').value = adjustedTrailerWeight.toFixed(2);
+    document.getElementById('adjustedCube').value = adjustedCube.toFixed(2); // Display the adjusted cube
 }
 
 function clearFields() {
-    // Clear the dynamically added fields by removing the elements
     var container = document.getElementById('weightInputs');
-    for (var i = 1; i < inputId; i++) { // Keep the initial set, clear the rest
+    for (var i = 1; i < inputId; i++) {
         var inputSet = document.getElementById('inputSet' + i);
-        container.removeChild(inputSet);
+        if (inputSet) {
+            container.removeChild(inputSet);
+        }
     }
-    inputId = 1; // Reset the global id tracker
+    inputId = 1;
 
-    // Clear all the remaining fields
     document.getElementById('bustWeight0').value = '';
     document.getElementById('actualWeight0').value = '';
+    document.getElementById('bustCube0').value = '';
+    document.getElementById('actualCube0').value = '';
     document.getElementById('currentTrailerWeight').value = '';
     document.getElementById('weightDifference').value = '';
     document.getElementById('maxWeight').value = '';
     document.getElementById('adjustedTrailerWeight').value = '';
-	document.getElementById('trailerNumber').value = '';
+    document.getElementById('currentCube').value = '';
+    document.getElementById('adjustedCube').value = ''; // Reset adjusted cube
+    document.getElementById('trailerNumber').value = '';
 }
-
 </script>
 </head>
 <body>
 
-<h3>Weight Calculation</h3>
+<h3>Weight and Cube Calculation</h3>
+
 <div>
     <label>Trailer Number:</label>
     <input type="text" id="trailerNumber" placeholder="Enter Trailer Number">
 </div>
 
-
 <div id="weightInputs">
     <div id="inputSet0">
         <input type="number" id="bustWeight0" placeholder="Bust Weight">
         <input type="number" id="actualWeight0" placeholder="Actual Weight">
+        <input type="number" id="bustCube0" placeholder="Bust Cube">
+        <input type="number" id="actualCube0" placeholder="Actual Cube">
     </div>
 </div>
 
@@ -96,6 +119,11 @@ function clearFields() {
 <div>
     <label>Current Trailer Weight:</label>
     <input type="number" id="currentTrailerWeight" placeholder="Current Trailer Weight">
+</div>
+
+<div>
+    <label>Current Cube:</label>
+    <input type="number" id="currentCube" placeholder="Enter Current Cube">
 </div>
 
 <div>
@@ -117,6 +145,12 @@ function clearFields() {
     <label>Adjusted Trailer Weight (Current - Difference):</label>
     <input type="text" id="adjustedTrailerWeight" readonly>
 </div>
+
+<div>
+    <label>Adjusted Cube:</label>
+    <input type="text" id="adjustedCube" readonly>
+</div>
+
 <footer>
     <p><button onclick="window.location.href='index.html';">Back to the Home Page</button></p>
 </footer>
