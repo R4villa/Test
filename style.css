@@ -1,0 +1,16 @@
+/* Add this CSS to your project to style the header and background */
+
+/* This styles the header with a light blue color */
+header {
+    background-color: #add8e6; /* Light Blue */
+    color: #ffffff; /* White color for the text */
+    padding: 20px;
+    text-align: center;
+}
+
+/* This styles the body of the page with a grey-blue background color */
+body {
+    background-color: #b0c4de; /* Grey-Blue */
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
